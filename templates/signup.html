@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+    input[type=text], select {
+      width: 100%;
+      padding: 3px 7px;
+      /* margin: 8px 0; */
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    input[type=submit] {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 4px 7px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+    </style>
+<h1>Signup</h1>
+<form name="form1" id="form1" action="{{url_for('admin')}}" method = "POST">
+    <tr><td>Username:</td><td><input type = "text" name = "Username"/></td></tr>
+    <tr><td>Password:</td><td><input type = "text" name = "Password" /></td></tdr>
+    <tr><td>Referral Code:</td><td><input type = "text" name = "ReferralCode" /></td></tdr>
+    <tr><td></td><td><input type="submit" value="Submit"></td></tr>  
+</form>
+{% endblock %}
