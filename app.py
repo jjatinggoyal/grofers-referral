@@ -59,4 +59,4 @@ def adminq():
         else:
             return render_template('invalid.html')
 
-app.run()
+# app.run()
