@@ -7,7 +7,7 @@ DB_PORT = "5432"
 from flask import Flask, render_template, request
 import psycopg2
 import psycopg2.extras
-import hashlib
+# import hashlib
 
 app = Flask(__name__)
 
@@ -104,19 +104,21 @@ def signup_user():
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         try:
             if request.form['ReferralCode'] == '':
-                def sha256_generator(str):
-                    m = hashlib.sha256()
-                    m.update(str.encode())
-                    return m.hexdigest()
-                refer_code = sha256_generator(request.form['Username'])[:5]
+                # def sha256_generator(str):
+                #     m = hashlib.sha256()
+                #     m.update(str.encode())
+                #     return m.hexdigest()
+                # refer_code = sha256_generator(request.form['Username'])[:5]
+                refer_code = request.form['Username']
                 cur.execute("insert into users(username, password, refer_status, refer_code, grofers_cash) values (%s, %s, 0, %s, 0)", (request.form['Username'], request.form['Password'], refer_code))
                 conn.commit()
             else:
-                def sha256_generator(str):
-                    m = hashlib.sha256()
-                    m.update(str.encode())
-                    return m.hexdigest()
-                refer_code = sha256_generator(request.form['Username'])[:5]
+                # def sha256_generator(str):
+                #     m = hashlib.sha256()
+                #     m.update(str.encode())
+                #     return m.hexdigest()
+                # refer_code = sha256_generator(request.form['Username'])[:5]
+                refer_code = request.form['Username']
                 cur.execute("select username from users where refer_status = 1 and refer_code = %s", (request.form['ReferralCode'],))
                 formdata = cur.fetchall()
                 if cur.rowcount > 0:
