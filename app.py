@@ -12,8 +12,8 @@ import hashlib
 app = Flask(__name__)
 
 def connect():
-    conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-    # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+    # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cur
 
@@ -188,4 +188,4 @@ def referral_milestones():
         cur.execute("select username from users where username = %s", (request.form['Username'],))
         return render_template('referral-milestones.html', name = cur.fetchall()[0][0], num = count, one = one, two = two, three = three)
 
-app.run()
+# app.run()
