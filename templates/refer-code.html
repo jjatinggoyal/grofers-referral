@@ -6,27 +6,7 @@
       width: 100%;
       padding: 3px 7px;
       color: #ccc;
-      /* margin: 8px 0; */
-      /* display: inline-block; */
-      /* border: 1px solid #ccc;
-      border-radius: 4px; */
-      /* box-sizing: border-box; */
     }
-    
-    /* input[type=submit] {
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      padding: 4px 7px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    input[type=submit]:hover {
-      background-color: #45a049;
-    } */
 </style>
 
 <form name="form1" id="form1" action="{{url_for('login_user')}}" method = "POST">
@@ -38,6 +18,11 @@
 <h1>Congrats {{name}}!</h1>
 
 <h1>Your Referral Code is: {{code}}</h1>
+
+<h2>Share your referral code on social media!</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<a href="https://facebook.com" target = "_blank" class="fa fa-facebook"></a>
+<a href="https://twitter.com" target = "_blank" class="fa fa-twitter"></a>
 
 <h1>Share your referral code and earn Grofers Cash for yourself and your friends!</h1>
 

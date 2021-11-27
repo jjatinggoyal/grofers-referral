@@ -1,0 +1,3 @@
+drop table if exists users, referrals;
+create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username));
+create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count));
