@@ -29,9 +29,9 @@ def hello():
 @app.route("/")
 def home():
     # conn, cur = connect()
+    # cur.execute("drop table if exists users")
     # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
     # cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
-    # cur.execute("drop table if exists users")
     # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
     # conn.commit()
     
@@ -101,6 +101,9 @@ def signup_user():
     if request.method == 'GET':
         return f"The URL /signup-user is accessed directly. Try going to '/signup' to signup"
     elif request.method == 'POST':
+        if len(request.form['Username']) < 3 or len(request.form['Password']) < 3:
+            err = 'username and password should have at least 3 letters'
+            return render_template('invalid-signup.html', error = err)
         conn, cur = connect()
         try:
             if request.form['ReferralCode'] == '':
@@ -147,7 +150,8 @@ def signup_user():
             return render_template('signup-user.html', name = request.form['Username'])
         except:
             conn.rollback()
-            return render_template('invalid-signup.html')
+            err = 'The user already exists or the referral code is invalid.'
+            return render_template('invalid-signup.html', error = err)
 
 incentives = [0, 'Refer 2 more friends to earn ₹100', 'Refer 1 more friends to earn ₹100', '₹100', 'Refer 1 more friends to earn ₹400', '₹400']
 
@@ -160,13 +164,16 @@ def referral_history():
         cur.execute("select referee as \"Friends Referred\", refer_count as \"Incentive Earned\" from referrals where referrer = %s", (request.form['Username'],))
         formdata = cur.fetchall()
         heading = cur.description
+        cur.execute("select username from users where username = %s", (request.form['Username'],))
+        if len(formdata) == 0:
+            return render_template('no-history.html', name = cur.fetchall()[0][0])
         for i in range(len(formdata)):
             ind = formdata[i][1]
             if ind > 5:
                 formdata[i][1] = '₹100'
             else:
                 formdata[i][1] = incentives[ind]
-        cur.execute("select username from users where username = %s", (request.form['Username'],))
+        
         return render_template('referral-history.html', name = cur.fetchall()[0][0], form_data = formdata, headings = heading)
 
 @app.route("/referral-milestones", methods = ['POST', 'GET'])

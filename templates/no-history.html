@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    input[type=text], select {
+      width: 100%;
+      padding: 3px 7px;
+      color: #ccc;
+    }
+</style>
+
+<form name="form1" id="form1" action="{{url_for('login_user')}}" method = "POST">
+    <tr><td><input type = "text" name = "Username" value = {{name}} readonly hidden/></td></tr>
+    <tr><td><input type = "text" name = "bit" value = "1" readonly hidden/></td></tr>
+    <tr><td></td><td><input type="submit" value="Dashboard"></td></tr>
+</form>
+
+<h1>{{name}} you have't referred anyone yet. Start now!</h1>
+
+{% endblock %}
