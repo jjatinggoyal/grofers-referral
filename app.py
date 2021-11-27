@@ -11,12 +11,14 @@ import hashlib
 
 app = Flask(__name__)
 
+# function to connect to db
 def connect():
     # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cur
 
+# admin function for testing purpose. user does not need to know about this
 @app.route("/admin")
 def hello():
     conn, cur = connect()
@@ -25,26 +27,30 @@ def hello():
     heading = cur.description
     return render_template('test.html', headings = heading, form_data = formdata)
 
-
+# home page. prompts the user to navigate to login or signup page
 @app.route("/")
 def home():
     conn, cur = connect()
-    cur.execute("drop table if exists users, referrals")
-    # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
-    # cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
-    # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
+    # cur.execute("drop table if exists users, referrals")
+    cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
+    cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
+    cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
     conn.commit()
     
     return render_template('home.html')
 
+# form to login
 @app.route("/login")
 def login():
     return render_template('login.html')
 
+# form to signup
 @app.route("/signup")
 def signup():
     return render_template('signup.html')
 
+# user dashboard on login
+# 
 @app.route("/login-user", methods = ['POST', 'GET'])
 def login_user():
     if request.method == 'GET':
