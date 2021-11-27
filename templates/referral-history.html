@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <table>
+        <tr>
+            {% for heading in headings %}
+                <th>{{heading[0]}}</th>
+            {% endfor %}
+        </tr>
+        {% for dat in form_data %}
+        <tr>
+            {% for data in dat %}
+            <td>{{data}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

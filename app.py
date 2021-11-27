@@ -174,6 +174,27 @@ def referral_history():
                 formdata[i][1] = incentives[ind]
         print(formdata)
         print(heading)
-        return render_template('test.html', form_data = formdata, headings = heading)
+        return render_template('referral-history.html', form_data = formdata, headings = heading)
+
+@app.route("/referral-milestones", methods = ['POST', 'GET'])
+def referral_milestones():
+    if request.method == 'GET':
+        return f"The URL /referral-milestones is accessed directly. Try going to '/login' to login"
+    elif request.method == 'POST':
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("select referee as \"Friends Referred\", refer_count as \"Incentive Earned\" from referrals where referrer = %s", (request.form['Username'],))
+        count = cur.rowcount
+        one = two = three = 'Not completed'
+        if count > 2 and count < 5:
+            one = 'Completed'
+        elif count == 5:
+            one = two = 'Completed'
+        elif count > 5:
+            one = two = 'Completed'
+            three = 'Keep Going for more!'
+
+        return render_template('referral-milestones.html', num = count, one = one, two = two, three = three)
 
 # app.run()

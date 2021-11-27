@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>You have completed {{num}} referrals. Keep referring and keep earning more!</h1>
+<h1>What's more, your referee friend will also earn ₹100! It's a win-win!</h1>
+
+<table>
+    <tr>
+        <th>Milestone</th>
+        <th>Incentive</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td>3rd Referral</td>
+        <td>₹100</td>
+        <td>{{one}}</td>
+    </tr>
+    <tr>
+        <td>5th Referral</td>
+        <td>₹400</td>
+        <td>{{two}}</td>
+    </tr>
+    <tr>
+        <td>6th Referral Onwards</td>
+        <td>₹100/Referral</td>
+        <td>{{three}}</td>
+    </tr>
+</table>
+
+
+{% endblock %}

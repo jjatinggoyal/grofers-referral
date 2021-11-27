@@ -37,6 +37,11 @@
     <tr><td></td><td><input type="submit" value="See your referral history"></td></tr>
 </form>
 
+<form name="form1" id="form1" action="{{url_for('referral_milestones')}}" method = "POST">
+    <tr><td><input type = "text" name = "Username" value = {{name}} readonly hidden/></td></tr>
+    <tr><td></td><td><input type="submit" value="See referral milestones"></td></tr>
+</form>
+
 <form name="form1" id="form1" action="{{url_for('withdraw_refer')}}" method = "POST">
     <tr><td><input type = "text" name = "Username" value = {{name}} readonly hidden/></td></tr>
     <tr><td></td><td><input type="submit" value="Withdraw from Referral program"></td></tr>  
