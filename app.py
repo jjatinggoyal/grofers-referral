@@ -7,7 +7,7 @@ DB_PORT = "5432"
 from flask import Flask, render_template, request
 import psycopg2
 import psycopg2.extras
-# import hashlib
+import hashlib
 
 app = Flask(__name__)
 
@@ -28,10 +28,10 @@ def home():
     # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    # # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
-    # # cur.execute("insert into users2 (username, password, refer_status, refer_code) values ('jatin', 'goyal', 0, 'jatin')")
-    cur.execute("drop table if exists users")
-    # # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
+    cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
+    cur.execute("insert into users2 (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
+    # cur.execute("drop table if exists users")
+    cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
     conn.commit()
     
     # cur.execute("select * from users")
@@ -104,21 +104,21 @@ def signup_user():
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         try:
             if request.form['ReferralCode'] == '':
-                # def sha256_generator(str):
-                #     m = hashlib.sha256()
-                #     m.update(str.encode())
-                #     return m.hexdigest()
-                # refer_code = sha256_generator(request.form['Username'])[:5]
-                refer_code = request.form['Username']
+                def sha256_generator(str):
+                    m = hashlib.sha256()
+                    m.update(str.encode())
+                    return m.hexdigest()
+                refer_code = sha256_generator(request.form['Username'])[:5]
+                # refer_code = request.form['Username']
                 cur.execute("insert into users(username, password, refer_status, refer_code, grofers_cash) values (%s, %s, 0, %s, 0)", (request.form['Username'], request.form['Password'], refer_code))
                 conn.commit()
             else:
-                # def sha256_generator(str):
-                #     m = hashlib.sha256()
-                #     m.update(str.encode())
-                #     return m.hexdigest()
-                # refer_code = sha256_generator(request.form['Username'])[:5]
-                refer_code = request.form['Username']
+                def sha256_generator(str):
+                    m = hashlib.sha256()
+                    m.update(str.encode())
+                    return m.hexdigest()
+                refer_code = sha256_generator(request.form['Username'])[:5]
+                # refer_code = request.form['Username']
                 cur.execute("select username from users where refer_status = 1 and refer_code = %s", (request.form['ReferralCode'],))
                 formdata = cur.fetchall()
                 if cur.rowcount > 0:
