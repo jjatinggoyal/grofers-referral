@@ -28,12 +28,12 @@ def hello():
 
 @app.route("/")
 def home():
-    # conn, cur = connect()
-    # cur.execute("drop table if exists users")
+    conn, cur = connect()
+    cur.execute("drop table if exists users, referrals")
     # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
     # cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
     # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
-    # conn.commit()
+    conn.commit()
     
     return render_template('home.html')
 
