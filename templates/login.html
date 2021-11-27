@@ -10,6 +10,16 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
+
+    input[type=password], select {
+      width: 100%;
+      padding: 3px 7px;
+      /* margin: 8px 0; */
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
     
     input[type=submit] {
       width: 100%;
@@ -27,9 +37,9 @@
     }
     </style>
 <h1>Login</h1>
-<form name="form1" id="form1" action="{{url_for('adminq')}}" method = "POST">
+<form name="form1" id="form1" action="{{url_for('login_user')}}" method = "POST">
     <tr><td>Username:</td><td><input type = "text" name = "Username"/></td></tr>
-    <tr><td>Password:</td><td><input type = "text" name = "Password" /></td></tdr>
+    <tr><td>Password:</td><td><input type = "password" name = "Password"/></td></tdr>
     <tr><td></td><td><input type="submit" value="Submit"></td></tr>  
 </form>
 {% endblock %}

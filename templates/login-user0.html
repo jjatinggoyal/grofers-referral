@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Hiya, {{name}}!</h1>
+
+<h1>Your Grofers Cash balance is: ₹ {{balance}}</h1>
+
+
+
+<style>
+    input[type=text], select {
+      width: 100%;
+      padding: 3px 7px;
+      color: #ccc;
+      /* margin: 8px 0; */
+      /* display: inline-block; */
+      /* border: 1px solid #ccc;
+      border-radius: 4px; */
+      /* box-sizing: border-box; */
+    }
+    
+    input[type=submit] {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 4px 7px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+</style>
+
+<form name="form1" id="form1" action="{{url_for('refer_code')}}" method = "POST">
+    <tr><td><input type = "text" name = "Username" value = {{name}} readonly hidden/></td></tr>
+    <tr><td></td><td><input type="submit" value="Get Your Referral Code"></td></tr>  
+</form>
+
+{% endblock %}
