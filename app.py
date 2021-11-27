@@ -26,13 +26,13 @@ def hello():
 @app.route("/")
 def home():
     # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
-    cur.execute("insert into users2 (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
+    # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+    # cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
+    # cur.execute("insert into users2 (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
     # cur.execute("drop table if exists users")
-    cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
-    conn.commit()
+    # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
+    # conn.commit()
     
     # cur.execute("select * from users")
     # formdata = cur.fetchall()
@@ -53,8 +53,8 @@ def login_user():
     if request.method == 'GET':
         return f"The URL /login-user is accessed directly. Try going to '/login' to login"
     elif request.method == 'POST':
-        conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-        # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("select * from users where username = %s and password = %s", (request.form['Username'], request.form['Password']))
         result = cur.rowcount
@@ -72,8 +72,8 @@ def refer_code():
     if request.method == 'GET':
         return f"The URL /refer-code is accessed directly. Try going to '/login' to login"
     elif request.method == 'POST':
-        conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-        # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("update users set refer_status = 1 where username = %s", (request.form['Username'],))
         conn.commit()
@@ -87,8 +87,8 @@ def withdraw_refer():
     if request.method == 'GET':
         return f"The URL /withdraw-refer is accessed directly. Try going to '/login' to login"
     elif request.method == 'POST':
-        conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-        # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("update users set refer_status = 0 where username = %s", (request.form['Username'],))
         conn.commit()
@@ -99,8 +99,8 @@ def signup_user():
     if request.method == 'GET':
         return f"The URL /signup-user is accessed directly. Try going to '/signup' to signup"
     elif request.method == 'POST':
-        conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-        # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         try:
             if request.form['ReferralCode'] == '':
@@ -158,8 +158,8 @@ def referral_history():
     if request.method == 'GET':
         return f"The URL /referral-history is accessed directly. Try going to '/login' to login"
     elif request.method == 'POST':
-        conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-        # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+        # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("select referee as \"Friends Referred\", refer_count as \"Incentive Earned\" from referrals where referrer = %s", (request.form['Username'],))
         formdata = cur.fetchall()
