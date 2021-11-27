@@ -26,13 +26,13 @@ def hello():
 @app.route("/")
 def home():
     # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
-    cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
+    # conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+    # cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
+    # cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
     # cur.execute("drop table if exists users")
-    cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
-    conn.commit()
+    # cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
+    # conn.commit()
     
     # cur.execute("select * from users")
     # formdata = cur.fetchall()
@@ -151,7 +151,7 @@ def signup_user():
             conn.rollback()
             return render_template('invalid-signup.html')
 
-incentives = [0, 'Refer 2 more friends to earn ₹100', 'Refer 1 more friends to earn ₹100', '₹100', 'Refer 1 more friends to earn ₹400']
+incentives = [0, 'Refer 2 more friends to earn ₹100', 'Refer 1 more friends to earn ₹100', '₹100', 'Refer 1 more friends to earn ₹400', '₹400']
 
 @app.route("/referral-history", methods = ['POST', 'GET'])
 def referral_history():
@@ -168,7 +168,7 @@ def referral_history():
         print(heading)
         for i in range(len(formdata)):
             ind = formdata[i][1]
-            if ind > 4:
+            if ind > 5:
                 formdata[i][1] = '₹100'
             else:
                 formdata[i][1] = incentives[ind]
