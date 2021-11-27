@@ -53,9 +53,19 @@ def login_user():
     if request.method == 'GET':
         return f"The URL /login-user is accessed directly. Try going to '/login' to login"
     elif request.method == 'POST':
+        
         # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
         conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        if 'bit' in request.form.keys():
+            if request.form['bit'] == "1":
+                cur.execute("select refer_code, grofers_cash from users where username = %s", (request.form['Username'],))
+                dat = cur.fetchall()[0]
+                return render_template('login-user1.html',balance = dat[1], name = request.form['Username'], code = dat[0])
+            else:
+                cur.execute("select grofers_cash from users where username = %s", (request.form['Username'],))
+                dat = cur.fetchall()[0]
+                return render_template('login-user0.html',balance = dat[0], name = request.form['Username'])
         cur.execute("select * from users where username = %s and password = %s", (request.form['Username'], request.form['Password']))
         result = cur.rowcount
         formdata = cur.fetchall()
@@ -63,7 +73,8 @@ def login_user():
             if formdata[0][2] == 0:
                 return render_template('login-user0.html',balance = formdata[0][5], name = request.form['Username'])
             else:
-                return render_template('login-user1.html',balance = formdata[0][5], name = request.form['Username'])
+                cur.execute("select refer_code from users where username = %s", (request.form['Username'],))
+                return render_template('login-user1.html',balance = formdata[0][5], name = request.form['Username'], code = cur.fetchall()[0][0])
         else:
             return render_template('invalid-login.html')
 
@@ -146,7 +157,7 @@ def signup_user():
                     conn.commit()
                 else:
                     return render_template('invalid-signup.html')
-            return render_template('signup-user.html')
+            return render_template('signup-user.html', name = request.form['Username'])
         except:
             conn.rollback()
             return render_template('invalid-signup.html')
@@ -164,17 +175,14 @@ def referral_history():
         cur.execute("select referee as \"Friends Referred\", refer_count as \"Incentive Earned\" from referrals where referrer = %s", (request.form['Username'],))
         formdata = cur.fetchall()
         heading = cur.description
-        print(formdata)
-        print(heading)
         for i in range(len(formdata)):
             ind = formdata[i][1]
             if ind > 5:
                 formdata[i][1] = '₹100'
             else:
                 formdata[i][1] = incentives[ind]
-        print(formdata)
-        print(heading)
-        return render_template('referral-history.html', form_data = formdata, headings = heading)
+        cur.execute("select username from users where username = %s", (request.form['Username'],))
+        return render_template('referral-history.html', name = cur.fetchall()[0][0], form_data = formdata, headings = heading)
 
 @app.route("/referral-milestones", methods = ['POST', 'GET'])
 def referral_milestones():
@@ -194,7 +202,7 @@ def referral_milestones():
         elif count > 5:
             one = two = 'Completed'
             three = 'Keep Going for more!'
-
-        return render_template('referral-milestones.html', num = count, one = one, two = two, three = three)
+        cur.execute("select username from users where username = %s", (request.form['Username'],))
+        return render_template('referral-milestones.html', name = cur.fetchall()[0][0], num = count, one = one, two = two, three = three)
 
 # app.run()
