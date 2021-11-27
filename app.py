@@ -30,13 +30,6 @@ def hello():
 # home page. prompts the user to navigate to login or signup page
 @app.route("/")
 def home():
-    conn, cur = connect()
-    # cur.execute("drop table if exists users, referrals")
-    cur.execute("create table users (username character varying not null, password character varying not null, refer_status bigint not null, refer_code character varying not null, referred_by character varying, grofers_cash bigint not null, primary key(username))")
-    cur.execute("insert into users (username, password, refer_status, refer_code, grofers_cash) values ('jatin', 'goyal', 0, 'jatin', 0)")
-    cur.execute("create table referrals (referrer character varying not null, referee character varying not null, refer_count bigint not null, primary key(referrer, referee, refer_count))")
-    conn.commit()
-    
     return render_template('home.html')
 
 # form to login
@@ -79,6 +72,8 @@ def login_user():
         else:
             return render_template('invalid-login.html')
 
+
+# referral code generation
 @app.route("/refer-code", methods = ['POST', 'GET'])
 def refer_code():
     if request.method == 'GET':
@@ -91,7 +86,7 @@ def refer_code():
         formdata = cur.fetchall()
         return render_template('refer-code.html',code = formdata[0][3], name = request.form['Username'])
         
-
+# withdrawal from referral program
 @app.route("/withdraw-refer", methods = ['POST', 'GET'])
 def withdraw_refer():
     if request.method == 'GET':
@@ -102,6 +97,7 @@ def withdraw_refer():
         conn.commit()
         return render_template('withdraw-refer.html',name = request.form['Username'])
 
+# signup success/failure status page
 @app.route("/signup-user", methods = ['POST', 'GET'])
 def signup_user():
     if request.method == 'GET':
@@ -159,8 +155,10 @@ def signup_user():
             err = 'The user already exists or the referral code is invalid.'
             return render_template('invalid-signup.html', error = err)
 
+# list to map incentives to number of referrals by a user
 incentives = [0, 'Refer 2 more friends to earn ₹100', 'Refer 1 more friends to earn ₹100', '₹100', 'Refer 1 more friends to earn ₹400', '₹400']
 
+# referral history of a user. shows incentives earned on each referral
 @app.route("/referral-history", methods = ['POST', 'GET'])
 def referral_history():
     if request.method == 'GET':
@@ -182,6 +180,7 @@ def referral_history():
         
         return render_template('referral-history.html', name = cur.fetchall()[0][0], form_data = formdata, headings = heading)
 
+# shows referral milestones - both completed and remaining for a user
 @app.route("/referral-milestones", methods = ['POST', 'GET'])
 def referral_milestones():
     if request.method == 'GET':
