@@ -174,4 +174,4 @@ def referral_history():
         print(heading)
         return render_template('test.html', form_data = formdata, headings = heading)
 
-app.run()
+# app.run()
