@@ -11,14 +11,24 @@ import hashlib
 
 app = Flask(__name__)
 
+# a running build of this web-app can be accessed at grofers.onrender.com
+
 # function to connect to db
+# edit db credentials to connect to your db
 def connect():
     # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cur
 
+# generates referral code for a user by hashing their usesrname
+def sha256_generator(str):
+    m = hashlib.sha256()
+    m.update(str.encode())
+    return m.hexdigest()
+
 # admin function for testing purpose. user does not need to know about this
+# shows all registered users
 @app.route("/admin")
 def hello():
     conn, cur = connect()
@@ -43,7 +53,9 @@ def signup():
     return render_template('signup.html')
 
 # user dashboard on login
-# 
+# prompts user to enroll for the referral program if not already
+# once user has registered, the dashboard shows stats such as referral history, referral milestones 
+# and a button to withdraw from the referral program
 @app.route("/login-user", methods = ['POST', 'GET'])
 def login_user():
     if request.method == 'GET':
@@ -73,7 +85,7 @@ def login_user():
             return render_template('invalid-login.html')
 
 
-# referral code generation
+# shows and activates referral code for a user when they enroll for the referral program on their dashboard
 @app.route("/refer-code", methods = ['POST', 'GET'])
 def refer_code():
     if request.method == 'GET':
@@ -86,7 +98,8 @@ def refer_code():
         formdata = cur.fetchall()
         return render_template('refer-code.html',code = formdata[0][3], name = request.form['Username'])
         
-# withdrawal from referral program
+# withdrawal from referral program. deactivates user's referral code
+# the user dashboard now does not show options to view referral history and milestones
 @app.route("/withdraw-refer", methods = ['POST', 'GET'])
 def withdraw_refer():
     if request.method == 'GET':
@@ -98,6 +111,12 @@ def withdraw_refer():
         return render_template('withdraw-refer.html',name = request.form['Username'])
 
 # signup success/failure status page
+# username and password can be any alphanumeric+special character string with at least 3 characters
+# if a user joins through a valid refer code, they earn ₹100
+# inserts and updates various datapoints
+# a referral code is generated for each new user at signup, but it has to be activated by the user to be valid
+# updates incentives for the referrer and referee
+# updates referral history for referrer
 @app.route("/signup-user", methods = ['POST', 'GET'])
 def signup_user():
     if request.method == 'GET':
@@ -109,18 +128,10 @@ def signup_user():
         conn, cur = connect()
         try:
             if request.form['ReferralCode'] == '':
-                def sha256_generator(str):
-                    m = hashlib.sha256()
-                    m.update(str.encode())
-                    return m.hexdigest()
                 refer_code = sha256_generator(request.form['Username'])[:5]
                 cur.execute("insert into users(username, password, refer_status, refer_code, grofers_cash) values (%s, %s, 0, %s, 0)", (request.form['Username'], request.form['Password'], refer_code))
                 conn.commit()
             else:
-                def sha256_generator(str):
-                    m = hashlib.sha256()
-                    m.update(str.encode())
-                    return m.hexdigest()
                 refer_code = sha256_generator(request.form['Username'])[:5]
                 cur.execute("select username from users where refer_status = 1 and refer_code = %s", (request.form['ReferralCode'],))
                 formdata = cur.fetchall()
@@ -158,7 +169,8 @@ def signup_user():
 # list to map incentives to number of referrals by a user
 incentives = [0, 'Refer 2 more friends to earn ₹100', 'Refer 1 more friends to earn ₹100', '₹100', 'Refer 1 more friends to earn ₹400', '₹400']
 
-# referral history of a user. shows incentives earned on each referral
+# referral history of a user.
+# fetches incentives earned on each referral
 @app.route("/referral-history", methods = ['POST', 'GET'])
 def referral_history():
     if request.method == 'GET':
