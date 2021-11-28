@@ -1,9 +1,3 @@
-DB_HOST = "dpg-c6ggsq76d9kjo81csesg"
-DB_NAME = "grofers"
-DB_USER = "jatin"
-DB_PASS = "8NsKIkmrpntNEns2lRXCWRzyKjozE7Qo"
-DB_PORT = "5432"
-
 from flask import Flask, render_template, request
 import psycopg2
 import psycopg2.extras
@@ -16,8 +10,7 @@ app = Flask(__name__)
 # function to connect to db
 # edit db credentials to connect to your db
 def connect():
-    # conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
-    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+    conn = psycopg2.connect(dbname="grofers", user="postgres", password="jatin", host="localhost", port="5432")
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cur
 
