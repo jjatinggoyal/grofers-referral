@@ -2,7 +2,7 @@
 
 ## Live build
 
-You can access a live build of the web-app at [grofers.onrender.com](grofers.onrender.com)
+You can access a live build of the web-app at [grofers.onrender.com](https://grofers.onrender.com)
 
 (Use referral code `jatin` at signup for ₹100 Grofers Cash (^-^))
 
