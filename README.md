@@ -41,7 +41,7 @@ Edit your database credentials in `app.py` at line 13
 run `gunicorn app:app`
 Alternatively, you can un-comment the last line of `app.py` and run `python app.py`.
 
-![Home Page](/images/1.png)
+![Home Page]<img src="/images/1.png" width="720" height="480">
 ![Signup Page](/images/2.png)
 ![Signup Success Page](/images/3.png)
 ![Dashboard 0](/images/4.png)
