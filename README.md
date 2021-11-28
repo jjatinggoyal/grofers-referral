@@ -6,6 +6,8 @@ You can access a live build of the web-app at [grofers.onrender.com](https://gro
 
 (Use referral code `jatin` at signup for ₹100 Grofers Cash (^-^))
 
+Note: the web-app may take upto 30 seconds to load on the first visit.
+
 ## Files
 
 ### static
@@ -41,13 +43,7 @@ Edit your database credentials in `app.py` at line 13
 run `gunicorn app:app`
 Alternatively, you can un-comment the last line of `app.py` and run `python app.py`.
 
-![Home Page]<img src="/images/1.png" width="720" height="480">
-![Signup Page](/images/2.png)
-![Signup Success Page](/images/3.png)
-![Dashboard 0](/images/4.png)
-![Generate Refer Code](/images/5.png)
-![Dashboard 1](/images/6.png)
-![Referral History](/images/7.png)
-![Referral Milestones](/images/8.png)
-![Withdraw Referral](/images/9.png)
-![Dashboard 0](/images/10.png)
+## Working
+
+Go to [tour.md](tour.md) for a step by step visit of the web-app.
+
